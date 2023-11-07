@@ -1,11 +1,19 @@
-[![GitHub release](https://img.shields.io/github/release/Toby-Shi-cloud/Mars-with-BUAA-CO-extension.svg)](https://GitHub.com/Toby-Shi-cloud/Mars-with-BUAA-CO-extension/releases/)
-[![Build Jar](https://github.com/Toby-Shi-cloud/Mars-with-BUAA-CO-extension/actions/workflows/build.yml/badge.svg)](https://github.com/Toby-Shi-cloud/Mars-with-BUAA-CO-extension/actions/workflows/build.yml)
+[![GitHub release](https://img.shields.io/github/release/swkfk/Mars-with-BUAA-CO-extension-headless.svg)](https://GitHub.com/swkfk/Mars-with-BUAA-CO-extension-headless/releases/)
+[![Build Jar](https://github.com/swkfk/Mars-with-BUAA-CO-extension-headless/actions/workflows/build.yml/badge.svg)](https://github.com/swkfk/Mars-with-BUAA-CO-extension-headless/actions/workflows/build.yml)
 
 ## 这是什么？
 
-这是一个魔改版 Mars，专用于 BUAA 的计算机组成实验。
+这是一个魔改的魔改版 Mars，用于一个 Verilog-CPU 的自动测评系统。
 
-基于 [Mars 4.5](http://courses.missouristate.edu/KenVollmar/MARS/) 开发
+基于基于 [Mars 4.5](http://courses.missouristate.edu/KenVollmar/MARS/) 开发的 [Mars_CO_v0.4.1](https://github.com/Toby-Shi-cloud/Mars-with-BUAA-CO-extension) 开发而来。
+
+感谢 [Toby Shi](https://github.com/Toby-Shi-cloud) 学长的付出！
+
+
+## 与原魔改版有什么不同？
+
+去除了用不到的 GUI 组件，以及帮助文档相关内容，减小 Jar 包体积。
+
 
 ## 与原版有什么不同？
 
@@ -77,6 +85,6 @@ java -jar mars.jar testcode.asm mc CompactLargeText coL1 cl bhelbal.class ig
 
 ## 版权声明
 
-请务必遵守[原版 Mars 版权声明](MARSlicense.txt)。
+请务必遵守[原版 Mars 版权声明](MARSlicense.txt) 与 [学长仓库的版权声明](TobyLicense.txt)。
 
 本扩展和原版一致使用 MIT 协议。
