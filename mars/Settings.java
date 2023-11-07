@@ -1,7 +1,6 @@
    package mars;
    import mars.*;
    import mars.util.*;
-   import mars.venus.editors.jeditsyntax.*;
    import java.io.*;
    import java.util.*;
    import java.util.prefs.*;
@@ -341,41 +340,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       private static String[] defaultSyntaxStyleColorSettingsValues;
       private static boolean[] defaultSyntaxStyleBoldSettingsValues;
       private static boolean[] defaultSyntaxStyleItalicSettingsValues;
-   
-   
-       public void setEditorSyntaxStyleByPosition( int index, SyntaxStyle syntaxStyle ) {
-         syntaxStyleColorSettingsValues[index] = syntaxStyle.getColorAsHexString();
-         syntaxStyleItalicSettingsValues[index] = syntaxStyle.isItalic();		 
-         syntaxStyleBoldSettingsValues[index] = syntaxStyle.isBold();
-         saveEditorSyntaxStyle(index);
-      }
-   	
-       public SyntaxStyle getEditorSyntaxStyleByPosition( int index ) {
-         return new SyntaxStyle(getColorValueByPosition(index, syntaxStyleColorSettingsValues),
-                                syntaxStyleItalicSettingsValues[index],
-                                syntaxStyleBoldSettingsValues[index]);
-      }
-   
-       public SyntaxStyle getDefaultEditorSyntaxStyleByPosition( int index ) {
-         return new SyntaxStyle(getColorValueByPosition(index, defaultSyntaxStyleColorSettingsValues),
-                                defaultSyntaxStyleItalicSettingsValues[index],
-                                defaultSyntaxStyleBoldSettingsValues[index]);
-      }   	
-   
-       private void saveEditorSyntaxStyle(int index) {
-         try {
-            preferences.put(syntaxStyleColorSettingsKeys[index], syntaxStyleColorSettingsValues[index]);
-            preferences.putBoolean(syntaxStyleBoldSettingsKeys[index], syntaxStyleBoldSettingsValues[index]);
-            preferences.putBoolean(syntaxStyleItalicSettingsKeys[index], syntaxStyleItalicSettingsValues[index]);
-            preferences.flush();
-         } 
-             catch (SecurityException se) {
-            // cannot write to persistent storage for security reasons
-            } 
-             catch (BackingStoreException bse) {
-            // unable to communicate with persistent storage (strange days)
-            } 
-      }
+
    	
       	// For syntax styles, need to initialize from SyntaxUtilities defaults.
       	// Taking care not to explicitly create a Color object, since it may trigger
@@ -385,38 +350,38 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    		// On othe other hand, the first statement of this method causes Color objects
    		// to be created!  It is possible but a real pain in the rear to avoid using 
    		// Color objects totally.  Requires new methods for the SyntaxUtilities class.
-       private void initializeEditorSyntaxStyles() {
-         SyntaxStyle syntaxStyle[] = SyntaxUtilities.getDefaultSyntaxStyles();
-         int tokens = syntaxStyle.length;
-         syntaxStyleColorSettingsKeys = new String[tokens]; 
-         syntaxStyleBoldSettingsKeys = new String[tokens]; 
-         syntaxStyleItalicSettingsKeys = new String[tokens]; 
-         defaultSyntaxStyleColorSettingsValues = new String[tokens];
-         defaultSyntaxStyleBoldSettingsValues = new boolean[tokens];
-         defaultSyntaxStyleItalicSettingsValues = new boolean[tokens];
-         syntaxStyleColorSettingsValues = new String[tokens];
-         syntaxStyleBoldSettingsValues = new boolean[tokens];
-         syntaxStyleItalicSettingsValues = new boolean[tokens];		
-         for (int i=0; i<tokens; i++) {
-            syntaxStyleColorSettingsKeys[i] = SYNTAX_STYLE_COLOR_PREFIX + i;
-            syntaxStyleBoldSettingsKeys[i] = SYNTAX_STYLE_BOLD_PREFIX + i;
-            syntaxStyleItalicSettingsKeys[i] = SYNTAX_STYLE_ITALIC_PREFIX + i;
-            syntaxStyleColorSettingsValues[i] = 
-               defaultSyntaxStyleColorSettingsValues[i] = syntaxStyle[i].getColorAsHexString();
-            syntaxStyleBoldSettingsValues[i] = 
-               defaultSyntaxStyleBoldSettingsValues[i] = syntaxStyle[i].isBold();
-            syntaxStyleItalicSettingsValues[i] = 
-               defaultSyntaxStyleItalicSettingsValues[i] = syntaxStyle[i].isItalic();
-         }
-      }
-   	
-       private void getEditorSyntaxStyleSettingsFromPreferences() {
-         for (int i=0; i<syntaxStyleColorSettingsKeys.length; i++) {
-            syntaxStyleColorSettingsValues[i] = preferences.get(syntaxStyleColorSettingsKeys[i], syntaxStyleColorSettingsValues[i]);
-            syntaxStyleBoldSettingsValues[i] = preferences.getBoolean(syntaxStyleBoldSettingsKeys[i], syntaxStyleBoldSettingsValues[i]);
-            syntaxStyleItalicSettingsValues[i] = preferences.getBoolean(syntaxStyleItalicSettingsKeys[i], syntaxStyleItalicSettingsValues[i]);
-         }
-      }
+//       private void initializeEditorSyntaxStyles() {
+//         SyntaxStyle syntaxStyle[] = SyntaxUtilities.getDefaultSyntaxStyles();
+//         int tokens = syntaxStyle.length;
+//         syntaxStyleColorSettingsKeys = new String[tokens];
+//         syntaxStyleBoldSettingsKeys = new String[tokens];
+//         syntaxStyleItalicSettingsKeys = new String[tokens];
+//         defaultSyntaxStyleColorSettingsValues = new String[tokens];
+//         defaultSyntaxStyleBoldSettingsValues = new boolean[tokens];
+//         defaultSyntaxStyleItalicSettingsValues = new boolean[tokens];
+//         syntaxStyleColorSettingsValues = new String[tokens];
+//         syntaxStyleBoldSettingsValues = new boolean[tokens];
+//         syntaxStyleItalicSettingsValues = new boolean[tokens];
+//         for (int i=0; i<tokens; i++) {
+//            syntaxStyleColorSettingsKeys[i] = SYNTAX_STYLE_COLOR_PREFIX + i;
+//            syntaxStyleBoldSettingsKeys[i] = SYNTAX_STYLE_BOLD_PREFIX + i;
+//            syntaxStyleItalicSettingsKeys[i] = SYNTAX_STYLE_ITALIC_PREFIX + i;
+//            syntaxStyleColorSettingsValues[i] =
+//               defaultSyntaxStyleColorSettingsValues[i] = syntaxStyle[i].getColorAsHexString();
+//            syntaxStyleBoldSettingsValues[i] =
+//               defaultSyntaxStyleBoldSettingsValues[i] = syntaxStyle[i].isBold();
+//            syntaxStyleItalicSettingsValues[i] =
+//               defaultSyntaxStyleItalicSettingsValues[i] = syntaxStyle[i].isItalic();
+//         }
+//      }
+//
+//       private void getEditorSyntaxStyleSettingsFromPreferences() {
+//         for (int i=0; i<syntaxStyleColorSettingsKeys.length; i++) {
+//            syntaxStyleColorSettingsValues[i] = preferences.get(syntaxStyleColorSettingsKeys[i], syntaxStyleColorSettingsValues[i]);
+//            syntaxStyleBoldSettingsValues[i] = preferences.getBoolean(syntaxStyleBoldSettingsKeys[i], syntaxStyleBoldSettingsValues[i]);
+//            syntaxStyleItalicSettingsValues[i] = preferences.getBoolean(syntaxStyleItalicSettingsKeys[i], syntaxStyleItalicSettingsValues[i]);
+//         }
+//      }
    // *********************************************************************************
    
    
@@ -627,169 +592,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          return stringSettingsValues[MEMORY_CONFIGURATION];
       }
    		
-   	/**
-   	 * Current editor font.  Retained for compatibility but replaced  
-   	 * by: getFontByPosition(Settings.EDITOR_FONT)
-   	 * @return Font object for current editor font.
-   	 */
-       public Font getEditorFont() {
-         return getFontByPosition(EDITOR_FONT);
-      }
-   	
-   	/**
-   	 *  Retrieve a Font setting
-   	 *  @param fontSettingPosition  constant that identifies which item
-   	 *  @return Font object for given item
-   	 */
-       public Font getFontByPosition(int fontSettingPosition) {
-         if (fontSettingPosition >=0 && fontSettingPosition < fontFamilySettingsValues.length) {
-            return EditorFont.createFontFromStringValues(fontFamilySettingsValues[fontSettingPosition],
-                               fontStyleSettingsValues[fontSettingPosition], 
-               					 fontSizeSettingsValues[fontSettingPosition]);
-         } 
-         else {
-            return null;
-         }
-      }
-   
-   	
-   	/**
-   	 *  Retrieve a default Font setting
-   	 *  @param fontSettingPosition  constant that identifies which item
-   	 *  @return Font object for given item
-   	 */
-       public Font getDefaultFontByPosition(int fontSettingPosition) {
-         if (fontSettingPosition >=0 && fontSettingPosition < defaultFontFamilySettingsValues.length) {
-            return EditorFont.createFontFromStringValues(defaultFontFamilySettingsValues[fontSettingPosition],
-                               defaultFontStyleSettingsValues[fontSettingPosition], 
-               					 defaultFontSizeSettingsValues[fontSettingPosition]);
-         } 
-         else {
-            return null;
-         }
-      }
-   		
-   	/**
-   	 * Order of text segment display columns (there are 5, numbered 0 to 4).
-   	 * @return Array of int indicating the order.  Original order is 0 1 2 3 4.
-   	 */
-       public int[] getTextColumnOrder() {
-         return getTextSegmentColumnOrder(stringSettingsValues[TEXT_COLUMN_ORDER]);
-      }
-   	
-   	/**
-   	 * Retrieve the caret blink rate in milliseconds.  Blink rate of 0 means 
-   	 * do not blink.
-   	 * @return int blink rate in milliseconds
-   	 */
-   	 
-       public int getCaretBlinkRate() {
-         int rate = 500;
-         try {
-            rate = Integer.parseInt(stringSettingsValues[CARET_BLINK_RATE]);
-         }
-             catch (NumberFormatException nfe) {
-               rate = Integer.parseInt(defaultStringSettingsValues[CARET_BLINK_RATE]);
-            }
-         return rate;
-      }
-   
-      
-   	/**
-   	 * Get the tab size in characters.
-   	 * @return tab size in characters.
-   	 */		
-       public int getEditorTabSize() {
-         int size = 8;
-         try {
-            size = Integer.parseInt(stringSettingsValues[EDITOR_TAB_SIZE]);
-         }
-             catch (NumberFormatException nfe) {
-               size = getDefaultEditorTabSize();
-            }
-         return size;
-      }
-   
-   
-   	/**
-   	 * Get number of letters to be matched by editor's instruction guide before popup generated (if popup enabled).
-   	 * Should be 1 or 2.  If 1, the popup will be generated after first letter typed, based on all matches; if 2, 
-   	 * the popup will be generated after second letter typed.
-   	 * @return number of letters (should be 1 or 2).
-   	 */		
-       public int getEditorPopupPrefixLength() {
-         int length = 2;
-         try {
-            length = Integer.parseInt(stringSettingsValues[EDITOR_POPUP_PREFIX_LENGTH]);
-         }
-             catch (NumberFormatException nfe) {
-               
-            }
-         return length;
-      }
-   
-   	
-   	/**
-   	 * Get the text editor default tab size in characters
-   	 * @return tab size in characters
-   	 */
-       public int getDefaultEditorTabSize() {
-         return Integer.parseInt(defaultStringSettingsValues[EDITOR_TAB_SIZE]);
-      }
-   	
-   	/**
-   	 * Get the saved state of the Labels Window sorting  (can sort by either
-   	 * label or address and either ascending or descending order).
-   	 * Default state is 0, by ascending addresses.
-   	 * @return State value 0-7, as a String.
-   	 */
-       public String getLabelSortState() {
-         return stringSettingsValues[LABEL_SORT_STATE];
-      }
-   	 
-   	 /**
-   	  * Get Color object for specified settings key.
-   	  * Returns null if key is not found or its value is not a valid color encoding.
-   	  * @param key the Setting key
-   	  * @return corresponding Color, or null if key not found or value not valid color
-   	  */
-       public Color getColorSettingByKey(String key) {
-         return getColorValueByKey(key, colorSettingsValues);
-      }
-   	
-   	 /**
-   	  * Get default Color value for specified settings key.
-   	  * Returns null if key is not found or its value is not a valid color encoding.
-   	  * @param key the Setting key
-   	  * @return corresponding default Color, or null if key not found or value not valid color
-   	  */   	
-       public Color getDefaultColorSettingByKey(String key) {
-         return getColorValueByKey(key, defaultColorSettingsValues);
-      }
-   
-   	
-   	 /**
-   	  * Get Color object for specified settings name (a static constant).
-   	  * Returns null if argument invalid or its value is not a valid color encoding.
-   	  * @param position the Setting name (see list of static constants)
-   	  * @return corresponding Color, or null if argument invalid or value not valid color
-   	  */
-       public Color getColorSettingByPosition(int position) {
-         return getColorValueByPosition(position, colorSettingsValues);
-      }
-   	
-   	 /**
-   	  * Get default Color object for specified settings name (a static constant).
-   	  * Returns null if argument invalid or its value is not a valid color encoding.
-   	  * @param position the Setting name (see list of static constants)
-   	  * @return corresponding default Color, or null if argument invalid or value not valid color
-   	  */   	
-       public Color getDefaultColorSettingByPosition(int position) {
-         return getColorValueByPosition(position, defaultColorSettingsValues);
-      }
-   
-   
-   	 
+
    
    	////////////////////////////////////////////////////////////////////////
    	//  Setting Setters
@@ -1030,114 +833,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          setStringSetting(MEMORY_CONFIGURATION, config);
       }
       
-   	/**
-   	 * Set the caret blinking rate in milliseconds.  Rate of 0 means no blinking.
-   	 * @param rate blink rate in milliseconds
-   	 */
-       public void setCaretBlinkRate(int rate) {
-         setStringSetting(CARET_BLINK_RATE, ""+rate);
-      }
-      
-   	/**
-   	 * Set the tab size in characters.
-   	 * @param size tab size in characters.
-   	 */		
-       public void setEditorTabSize(int size) {
-         setStringSetting(EDITOR_TAB_SIZE, ""+size);
-      }
-   
-   	/**
-   	 * Set number of letters to be matched by editor's instruction guide before popup generated (if popup enabled).
-   	 * Should be 1 or 2.  If 1, the popup will be generated after first letter typed, based on all matches; if 2, 
-   	 * the popup will be generated after second letter typed.
-   	 * @param number of letters (should be 1 or 2).
-   	 */		
-       public void setEditorPopupPrefixLength(int length) {
-         setStringSetting(EDITOR_POPUP_PREFIX_LENGTH, ""+length);
-      }
-   
-   	/**
-   	 * Set editor font to the specified Font object and write it to persistent storage.
-   	 * This method retained for compatibility but replaced by: 
-   	 * setFontByPosition(Settings.EDITOR_FONT, font)
-   	 * @param font Font object to be used by text editor.
-   	 */
-       public void setEditorFont(Font font) {
-         setFontByPosition(EDITOR_FONT, font);
-      }
-   
-   	/**
-   	 *  Store a Font setting
-   	 *  @param fontSettingPosition Constant that identifies the item the font goes with
-   	 *  @font The font to set that item to
-   	 */
-       public void setFontByPosition(int fontSettingPosition, Font font) {
-         if (fontSettingPosition >=0 && fontSettingPosition < fontFamilySettingsValues.length) {
-            fontFamilySettingsValues[fontSettingPosition] = font.getFamily();
-            fontStyleSettingsValues[fontSettingPosition] = EditorFont.styleIntToStyleString(font.getStyle());
-            fontSizeSettingsValues[fontSettingPosition] = EditorFont.sizeIntToSizeString(font.getSize());
-            saveFontSetting(fontSettingPosition, fontFamilySettingsKeys, fontFamilySettingsValues);
-            saveFontSetting(fontSettingPosition, fontStyleSettingsKeys, fontStyleSettingsValues);
-            saveFontSetting(fontSettingPosition, fontSizeSettingsKeys, fontSizeSettingsValues);
-         } 
-         if (fontSettingPosition == EDITOR_FONT) {
-            setChanged();
-            notifyObservers();
-         }
-      }
-   
-   
-    	
-   	/**
-   	 * Store the current order of Text Segment window table columns, so the ordering
-   	 * can be preserved and restored.
-   	 * @param columnOrder An array of int indicating column order.
-   	 */
-   	 
-       public void setTextColumnOrder(int[] columnOrder) {
-         String stringifiedOrder = new String();
-         for (int i=0; i<columnOrder.length; i++) {
-            stringifiedOrder += Integer.toString(columnOrder[i])+" ";
-         }
-         setStringSetting(TEXT_COLUMN_ORDER, stringifiedOrder);
-      }
-   	 
-   	 /**
-   	  * Store the current state of the Labels Window sorter.  There are 8 possible states
-   	  * as described in LabelsWindow.java
-   	  * @param state The current labels window sorting state, as a String.
-   	  */
-   	  
-       public void setLabelSortState(String state) {
-         setStringSetting(LABEL_SORT_STATE, state);
-      }
-   
-   	 
-   	 /**
-   	  * Set Color object for specified settings key.  Has no effect if key is invalid.
-   	  * @param key the Setting key
-   	  * @param color the Color to save
-   	  */
-       public void setColorSettingByKey(String key, Color color) {
-         for (int i=0; i<colorSettingsKeys.length; i++) {
-            if (key.equals(colorSettingsKeys[i])) {
-               setColorSettingByPosition(i, color);
-               return;
-            }
-         }
-      }
-   	
-   	 /**
-   	  * Set Color object for specified settings name (a static constant). Has no effect if invalid.
-   	  * @param position the Setting name (see list of static constants)
-   	  * @param color the Color to save
-   	  */
-       public void setColorSettingByPosition(int position, Color color) {
-         if (position >= 0 && position < colorSettingsKeys.length) {
-            setColorSetting(position, color);
-         }
-      }
-   
+
+
    /////////////////////////////////////////////////////////////////////////
    //
    //     PRIVATE HELPER METHODS TO DO THE REAL WORK
@@ -1173,7 +870,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          for (int i=0; i<colorSettingsValues.length; i++) {
             colorSettingsValues[i] = defaultColorSettingsValues[i];
          }
-         initializeEditorSyntaxStyles();
+//         initializeEditorSyntaxStyles();
       }
    		
       // Used by all the boolean setting "setter" methods.
@@ -1191,25 +888,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          stringSettingsValues[settingIndex] = value;
          saveStringSetting(settingIndex);
       }
-   
-      // Used by setter methods for color-based settings
-       private void setColorSetting(int settingIndex, Color color) {
-         colorSettingsValues[settingIndex] = Binary.intToHexString( color.getRed()<<16 | color.getGreen()<<8 | color.getBlue() );
-         saveColorSetting(settingIndex);
-      }
-   
-      // Get Color object for this key value.  Get it from values array provided as argument (could be either
-   	// the current or the default settings array).
-       private Color getColorValueByKey(String key, String[] values) {
-         Color color = null;
-         for (int i=0; i<colorSettingsKeys.length; i++) {
-            if (key.equals(colorSettingsKeys[i])) {
-               return getColorValueByPosition(i, values);
-            }
-         }
-         return null;
-      }   
-   	
+
    	 // Get Color object for this key array position.  Get it from values array provided as argument (could be either
    	 // the current or the default settings array).	
        private Color getColorValueByPosition(int position, String[] values) {
@@ -1224,22 +903,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          }
          return color;
       }
-   
-   
-      // Maybe someday I'll convert the whole shebang to use Maps.  In the meantime, we use
-   	// linear search of array.  Not a huge deal as settings are little-used.
-   	// Returns index or -1 if not found.
-       private int getIndexOfKey(String key, String[] array) {
-         int index = -1;
-         for (int i=0; i<array.length; i++) {
-            if (array[i].equals(key)) {
-               index = i;
-               break;
-            }
-         }
-         return index;
-      }
-   	  
+
    	
    	// Establish the settings from the given properties file.  Return true if it worked,
    	// false if it didn't.  Note the properties file exists only to provide default values
@@ -1314,7 +978,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          for (int i=0; i<colorSettingsKeys.length; i++) {
             colorSettingsValues[i] = preferences.get(colorSettingsKeys[i], colorSettingsValues[i]);
          }
-         getEditorSyntaxStyleSettingsFromPreferences();
+//         getEditorSyntaxStyleSettingsFromPreferences();
       }
    	
    	
@@ -1346,38 +1010,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             // unable to communicate with persistent storage (strange days)
             }		
       }
-   
-   
-   	// Save the key-value pair in the Properties object and assure it is written to persisent storage.		
-       private void saveFontSetting(int index, String[] settingsKeys, String[] settingsValues) {
-         try {
-            preferences.put(settingsKeys[index], settingsValues[index]);
-            preferences.flush();
-         } 
-             catch (SecurityException se) {
-            // cannot write to persistent storage for security reasons
-            } 
-             catch (BackingStoreException bse) {
-            // unable to communicate with persistent storage (strange days)
-            }		
-      }
-   
-   
-   	// Save the key-value pair in the Properties object and assure it is written to persisent storage.		
-       private void saveColorSetting(int index) {
-         try {
-            preferences.put(colorSettingsKeys[index], colorSettingsValues[index]);
-            preferences.flush();
-         } 
-             catch (SecurityException se) {
-            // cannot write to persistent storage for security reasons
-            } 
-             catch (BackingStoreException bse) {
-            // unable to communicate with persistent storage (strange days)
-            }		
-      }
-   	 
-   	
+
    	 /*
    	  *  Private helper to do the work of converting a string containing Text
    	  *  Segment window table column order into int array and returning it.

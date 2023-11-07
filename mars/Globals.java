@@ -72,7 +72,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     /* Flag that indicates whether or not instructionSet has been initialized. */
       private static boolean initialized = false;
     /* The GUI being used (if any) with this simulator. */
-      static VenusUI gui = null;
+//      static VenusUI gui = null;
     /** The current MARS version number. Can't wait for "initialize()" call to get it. */
       public static final String version = "4.5";
     /** List of accepted file extensions for MIPS assembly source files. */
@@ -115,14 +115,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
        private static String getCopyrightHolders() {
          return "Pete Sanderson and Kenneth Vollmar";
       }
-    
-       public static void setGui(VenusUI g) {
-         gui = g;
-      }
-       public static VenusUI getGui() {
-         return gui;
-      }
-    
+
        public static Settings getSettings() {
          return settings;
       }

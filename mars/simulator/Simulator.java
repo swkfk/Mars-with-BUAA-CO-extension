@@ -78,9 +78,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    
        private Simulator() {
          simulatorThread = null;
-         if (Globals.getGui() != null) {
-            interactiveGUIUpdater = new UpdateGUI();
-         } 
+//         if (Globals.getGui() != null) {
+//            interactiveGUIUpdater = new UpdateGUI();
+//         }
       }
    
    
@@ -177,13 +177,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
        private void notifyObserversOfExecutionStart(int maxSteps, int programCounter) {
          this.setChanged();
          this.notifyObservers(new SimulatorNotice(SimulatorNotice.SIMULATOR_START,
-            maxSteps, RunSpeedPanel.getInstance().getRunSpeed(), programCounter) );
+            maxSteps, 40, programCounter) );
       }
    
        private void notifyObserversOfExecutionStop(int maxSteps, int programCounter) {
          this.setChanged();
          this.notifyObservers(new SimulatorNotice(SimulatorNotice.SIMULATOR_STOP,
-            maxSteps, RunSpeedPanel.getInstance().getRunSpeed(), programCounter) );
+            maxSteps, 40, programCounter) );
       }
    	 
    	 
@@ -219,7 +219,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       	 *  @param starter the GUI component responsible for this call, usually GO or STEP.  null if none.
       	 */
           SimThread(MIPSprogram p, int pc, int maxSteps, int[] breakPoints, AbstractAction starter) {
-            super(Globals.getGui()!=null);  
+            super(false);
             this.p = p;
             this.pc = pc;
             this.maxSteps = maxSteps;
@@ -452,14 +452,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             	//                              using Run,  not Step (maxSteps > 1) AND
             	//                              running slowly enough for GUI to keep up
                //if (Globals.getGui() != null && maxSteps != 1 &&             
-               if (interactiveGUIUpdater != null && maxSteps != 1 && 
-                          RunSpeedPanel.getInstance().getRunSpeed() < RunSpeedPanel.UNLIMITED_SPEED) {
+               if (interactiveGUIUpdater != null && maxSteps != 10) {
                   SwingUtilities.invokeLater(interactiveGUIUpdater);
                }
-               if (Globals.getGui() != null || Globals.runSpeedPanelExists) { // OR added by DPS 24 July 2008 to enable speed control by stand-alone tool
-                  if (maxSteps != 1 && 
-                          RunSpeedPanel.getInstance().getRunSpeed() < RunSpeedPanel.UNLIMITED_SPEED) {
-                     try { Thread.sleep((int)(1000/RunSpeedPanel.getInstance().getRunSpeed())); // make sure it's never zero!
+               if (Globals.runSpeedPanelExists) { // OR added by DPS 24 July 2008 to enable speed control by stand-alone tool
+                  if (maxSteps != 1) {
+                     try { Thread.sleep((int)(1000/40)); // make sure it's never zero!
                      } 
                          catch (InterruptedException e) {}
                   }
@@ -517,48 +515,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       	 
           public void finished() {
            // If running from the command-line, then there is no GUI to update.
-            if (Globals.getGui() == null) {
-               return;
-            }
-            String starterName = (String) starter.getValue(AbstractAction.NAME);
-            if (starterName.equals("Step")) {
-               ((RunStepAction)starter).stepped(done,constructReturnReason,pe);
-            }   
-            if (starterName.equals("Go")) {
-               if (done) {
-                  ((RunGoAction)starter).stopped(pe,constructReturnReason);
-               } 
-               else if (constructReturnReason == BREAKPOINT) {
-                  ((RunGoAction)starter).paused(done,constructReturnReason,pe);
-               } 
-               else {
-                  String stopperName = (String) stopper.getValue(AbstractAction.NAME);
-                  if ("Pause".equals(stopperName)) {
-                     ((RunGoAction)starter).paused(done,constructReturnReason,pe);
-                  }
-                  else if ("Stop".equals(stopperName)) {
-                     ((RunGoAction)starter).stopped(pe,constructReturnReason);
-                  }
-               }
-            }
-            return;
          }
          
       }
-   	
-       private class UpdateGUI implements Runnable {
-          public void run() {
-            if (Globals.getGui().getRegistersPane().getSelectedComponent() == 
-                                                     Globals.getGui().getMainPane().getExecutePane().getRegistersWindow()) {
-               Globals.getGui().getMainPane().getExecutePane().getRegistersWindow().updateRegisters();
-            } 
-            else {
-               Globals.getGui().getMainPane().getExecutePane().getCoprocessor1Window().updateRegisters();
-            }
-            Globals.getGui().getMainPane().getExecutePane().getDataSegmentWindow().updateValues();
-            Globals.getGui().getMainPane().getExecutePane().getTextSegmentWindow().setCodeHighlighting(true);
-            Globals.getGui().getMainPane().getExecutePane().getTextSegmentWindow().highlightStepAtPC();   
-         }
-      }
-   
    }

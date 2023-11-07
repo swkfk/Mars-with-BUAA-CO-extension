@@ -138,7 +138,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          boolean gui = (args.length == 0);
          Globals.initialize(gui);  
          if (gui) {
-            launchIDE();  
+//            launchIDE();
          } 
          else { // running from command line.
             // assure command mode works in headless environment (generates exception if not)
@@ -243,19 +243,19 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	// There are no command arguments, so run in interactive mode by
    	// launching the GUI-fronted integrated development environment.
    	
-      private void launchIDE() {
-         // System.setProperty("apple.laf.useScreenMenuBar", "true"); // Puts MARS menu on Mac OS menu bar
-         new MarsSplashScreen(splashDuration).showSplash();
-         SwingUtilities.invokeLater(
-               new Runnable() {
-                  public void run() {
-                     //Turn off metal's use of bold fonts
-                     //UIManager.put("swing.boldMetal", Boolean.FALSE);
-                     new VenusUI("Mars with BUAA CO extension " + Globals.extensionVersion);
-                  }
-               }); 
-         return;					
-      }
+//      private void launchIDE() {
+//         // System.setProperty("apple.laf.useScreenMenuBar", "true"); // Puts MARS menu on Mac OS menu bar
+//         new MarsSplashScreen(splashDuration).showSplash();
+//         SwingUtilities.invokeLater(
+//               new Runnable() {
+//                  public void run() {
+//                     //Turn off metal's use of bold fonts
+//                     //UIManager.put("swing.boldMetal", Boolean.FALSE);
+//                     new VenusUI("Mars with BUAA CO extension " + Globals.extensionVersion);
+//                  }
+//               });
+//         return;
+//      }
    			
    			
    	//////////////////////////////////////////////////////////////////////

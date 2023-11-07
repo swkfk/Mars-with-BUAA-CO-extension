@@ -75,8 +75,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                            listeners[i].actionPerformed(event);
                         }
                      }
-                  	// Better to use notify, but I am tired...
-                     Globals.getGui().getMainPane().getExecutePane().numberDisplayBaseChanged(choose);
                   }
                });
       }
