@@ -102,6 +102,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
            cl  -- load an additional instruction from a .class file.<br>
                   Note that your .class file must be in the same directory as mars.jar.<br>
            ig  -- ignore arithmetic overflow.<br>
+           cc  -- count the cycles of the simulator.<br>
+ccw <div>:<mul>:<j/br>:<mem>:<other> -- set the real cycles of each instruction.<br>
     **/
     
    

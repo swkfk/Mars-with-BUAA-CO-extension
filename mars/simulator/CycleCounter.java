@@ -29,10 +29,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import mars.Globals;
 import mars.ProgramStatement;
-import mars.mips.instructions.Instruction;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  * Used to count the real cycles of the simulator. The cycles of different instructions may be different.
