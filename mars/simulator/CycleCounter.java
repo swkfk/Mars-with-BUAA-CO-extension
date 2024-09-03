@@ -28,6 +28,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 import mars.Globals;
+import mars.ProgramStatement;
+import mars.mips.instructions.Instruction;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Used to count the real cycles of the simulator. The cycles of different instructions may be different.
@@ -52,6 +57,15 @@ public class CycleCounter {
         type.cycles = cycles;
     }
 
+    private void updateCycle(InstructionType type) {
+        type.count++;
+    }
+
+    /**
+     * Parse the cycles weight setting and set the cycles of different instructions.
+     * The setting should be in the format of "DIV:MUL:GOTO:MEM:OTHER".
+     * If the "cc" setting is false, the cycles will not be counted and the "ccw" setting will be ignored.
+     */
     public CycleCounter() {
         if (!Globals.getSettings().getCountCycles()) {
             return;
@@ -67,5 +81,83 @@ public class CycleCounter {
             System.err.println("Error: Invalid cycles weight setting.");
             System.exit(1);
         }
+    }
+
+    /**
+     * Count the cycles of the instruction. If the "cc" setting is false, the cycles will not be counted.
+     * @param statement The ProgramStatement to be counted.
+     */
+    public void update(ProgramStatement statement) {
+        if (!Globals.getSettings().getCountCycles()) {
+            return;
+        }
+
+        int opcode = statement.getBinaryStatement() >>> 26;
+        int func = statement.getBinaryStatement() & 0x1F;
+
+        if (opcode == 0x00) {
+            if (func == 0b001000 || func == 0b001001) {
+                // jr, jalr
+                updateCycle(InstructionType.GOTO);
+            } else if (func == 0b011000 || func == 0b011001) {
+                // mult, multu
+                updateCycle(InstructionType.MUL);
+            } else if (func == 0b011010 || func == 0b011011) {
+                // div, divu
+                updateCycle(InstructionType.DIV);
+            } else {
+                updateCycle(InstructionType.OTHER);
+            }
+        } else if (opcode == 0x01) {
+            if (func <= 0x07 || (0x10 <= func && func <= 0x13)) {
+                // bltz, bgez, bltzl, bgezl, bltzal, bgezal, bltzall, bgczall
+                updateCycle(InstructionType.GOTO);
+            } else {
+                updateCycle(InstructionType.OTHER);
+            }
+        } else if (opcode == 0b000010 || opcode == 0b000011) {
+            // j, jal
+            updateCycle(InstructionType.GOTO);
+        } else if (opcode <= 0x07) {
+            // beq, bne, blez, bgtz
+            updateCycle(InstructionType.GOTO);
+        } else if (0x14 <= opcode && opcode <= 0x17) {
+            // beql, bnel, blezl, bgtzl
+            updateCycle(InstructionType.GOTO);
+        } else if (0x20 <= opcode && opcode <= 0x26) {
+            // lb, lh, lwl, lw, lbu, lhu, lwr
+            updateCycle(InstructionType.MEM);
+        } else if (0x28 <= opcode && opcode <= 0x2E) {
+            // sb, sh, swl, sw, swr
+            updateCycle(InstructionType.MEM);
+        } else {
+            updateCycle(InstructionType.OTHER);
+        }
+    }
+
+    public String emitResult() {
+        if (!Globals.getSettings().getCountCycles()) {
+            return "Cycles counting is disabled.";
+        }
+        float total = InstructionType.DIV.count * InstructionType.DIV.cycles +
+                      InstructionType.MUL.count * InstructionType.MUL.cycles +
+                      InstructionType.GOTO.count * InstructionType.GOTO.cycles +
+                      InstructionType.MEM.count * InstructionType.MEM.cycles +
+                      InstructionType.OTHER.count * InstructionType.OTHER.cycles;
+        return String.format(
+            "DIV: %d * %.1f%n" +
+            "MUL: %d * %.1f%n" +
+            "J/Br: %d * %.1f%n" +
+            "Mem: %d * %.1f%n" +
+            "Other: %d * %.1f%n" +
+            "======%n" +
+            "Total: %.1f Cycles",
+            InstructionType.DIV.count, InstructionType.DIV.cycles,
+            InstructionType.MUL.count, InstructionType.MUL.cycles,
+            InstructionType.GOTO.count, InstructionType.GOTO.cycles,
+            InstructionType.MEM.count, InstructionType.MEM.cycles,
+            InstructionType.OTHER.count, InstructionType.OTHER.cycles,
+            total
+        );
     }
 }
