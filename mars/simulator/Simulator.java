@@ -321,6 +321,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          	// *********************************************************************
          	
             int pc = 0;  // added: 7/26/06 (explanation above)
+
+            CycleCounter cycleCounter = new CycleCounter();
          
             while (statement != null) {
                pc = RegisterFile.getProgramCounter(); // added: 7/26/06 (explanation above)
