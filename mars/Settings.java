@@ -359,15 +359,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
        }
 
        public void setCyclesWeight(String value) {
-           setStringSetting(CyclesWeight, value);
+           stringSettingsValues[CyclesWeight] = value;
        }
 
        public boolean getCountCycles() {
            return booleanSettingsValues[COUNT_CYCLES];
-       }
-
-       public void setCountCycles() {
-           internalSetBooleanSetting(COUNT_CYCLES, true);
        }
 
       public int getOutputLoggingLevel() {
